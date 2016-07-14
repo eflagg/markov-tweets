@@ -57,11 +57,11 @@ def make_text(chains):
         key = (key[1], word)
 
     final_text = " ".join(words)
-    print len(final_text)
-    if len(final_text) > 140:
-        return final_text[:140]
-    else:
-        return final_text
+    # print len(final_text)
+    # if len(final_text) > 140:
+    return final_text[:140]
+    # else:
+        # return final_text
     
     # print " ".join(words)
     #return " ".join(words)
@@ -71,14 +71,23 @@ def tweet(chains):
     # Use Python os.environ to get at environmental variables
     # Note: you must run `source secrets.sh` before running this file
     # to make sure these environmental variables are set.
-    while True:
-        api = twitter.Api(
-            consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
-            consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
-            access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
-            access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
+    
+    api = twitter.Api(
+        consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+        consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+        access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+        access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
+    
+    print api.VerifyCredentials()
 
-        print api.VerifyCredentials()
+    while True:
+        statuses = api.GetUserTimeline(screen_name="Lormily16", count=1)
+        text_last = ([s.text for s in statuses])
+        # possible_u = text_last[0][0]
+        # print possible_u
+        print "Last Tweet: ", text_last
+        #print type(text_last)
+              
         text = make_text(chains)
 
         status = api.PostUpdate(text)
